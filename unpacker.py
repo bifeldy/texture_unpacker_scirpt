@@ -76,13 +76,13 @@ def frames_from_data(filename, ext):
         json_data = open(data_filename)
         data = json.load(json_data)
         frames = {}
-        for f in data['frames']:
-            x = int(float(f["frame"]["x"]))
-            y = int(float(f["frame"]["y"]))
-            w = int(float(f["frame"]["h"] if f['rotated'] else f["frame"]["w"]))
-            h = int(float(f["frame"]["w"] if f['rotated'] else f["frame"]["h"]))
-            real_w = int(float(f["sourceSize"]["h"] if f['rotated'] else f["sourceSize"]["w"]))
-            real_h = int(float(f["sourceSize"]["w"] if f['rotated'] else f["sourceSize"]["h"]))
+        for (k, v) in data['frames'].items():
+            x = int(float(data['frames'][k]["frame"]["x"]))
+            y = int(float(data['frames'][k]["frame"]["y"]))
+            w = int(float(data['frames'][k]["frame"]["h"] if data['frames'][k]['rotated'] else data['frames'][k]["frame"]["w"]))
+            h = int(float(data['frames'][k]["frame"]["w"] if data['frames'][k]['rotated'] else data['frames'][k]["frame"]["h"]))
+            real_w = int(float(data['frames'][k]["sourceSize"]["h"] if data['frames'][k]['rotated'] else data['frames'][k]["sourceSize"]["w"]))
+            real_h = int(float(data['frames'][k]["sourceSize"]["w"] if data['frames'][k]['rotated'] else data['frames'][k]["sourceSize"]["h"]))
             d = {
                 'box': (
                     x,
@@ -100,9 +100,9 @@ def frames_from_data(filename, ext):
                     int((real_w + w) / 2),
                     int((real_h + h) / 2)
                 ),
-                'rotated': f['rotated']
+                'rotated': data['frames'][k]['rotated']
             }
-            frames[f["filename"]] = d
+            frames[k] = d
         json_data.close()
         return frames.items()
     else:
